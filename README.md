@@ -1,5 +1,5 @@
 <p align="center">
-<img src="https://avatars1.githubusercontent.com/u/60418550?s=460&u=f6aadbde2bd1f35ca7ba5cb75b800b002c298d48&v=4" width="128" height="128"/>
+<img src="https://avatars1.githubusercontent.com/u/25873486?s=460&u=1502f7e7638d008f16c8dde8e9f3da108e1293b9&v=4" width="128" height="128"/>
 </p>
 <div align="center">
 <details>
@@ -14,11 +14,6 @@ THANKS BANG ARUGAZ DAN PAKFORLAY ATAS API NYA!!!
 <p align="center"><a href="https://yaelahdo.herokuapp.com/" target="_blank">API PakForlay</a>.</p>
 </div>
 
-## NOMOR WHATSAPP BOT
-+6285864456465
-
-## CHANGE LOG AT BOTTOM
-
 ## Getting Started
 This project require NodeJS v12.
 
@@ -26,8 +21,8 @@ This project require NodeJS v12.
 Clone this project
 
 ```bash
-> git clone https://github.com/pakforlay/whatsapp-botz.git
-> cd whatsapp-bot
+> git clone https://github.com/VanmoelJr/wa-v2.git
+> cd wa-v2
 ```
 
 Install the dependencies:
