@@ -35,7 +35,7 @@ const start = (m2 = new Client()) => {
 	    })
 	    } else {
         await m2.simulateTyping(chat.id, true).then(async () => {
-          await m2.sendText(chat.id, `Hi buddy~, I m M2 BOT but you can call me M. To find out the commands for this bot services type ${prefix}menu or ${prefix}help`)
+          await m2.sendText(chat.id, `Hi buddy~, I m M2 BOT but you can call me M. To find out the commands for this bot services type ${prefix}menu or ${prefix}help`, id)
         })
 	    }
 	}
@@ -56,7 +56,7 @@ const start = (m2 = new Client()) => {
         // kondisi ketika seseorang dikick/keluar dari group
         if (event.action === 'remove' && event.who !== host) {
 			await m2.sendFileFromUrl(event.chat, profile, 'profile.jpg', '')
-            await m2.sendTextWithMentions(event.chat, `Good bye @${event.who.replace('@c.us', '')}, We'll miss you 😭`)
+            await m2.sendTextWithMentions(event.chat, `Good bye @${event.who.replace('@c.us', '')}, We'll miss you 😭`, id)
         }
     })
 

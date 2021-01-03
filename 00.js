@@ -35,54 +35,88 @@ Dimohon untuk tidak menghapus link github saya, butuh support dari kalian! makas
 exports.textMenu = (pushname) => {
     return `
 Hi, ${pushname}! 👋️
-_Sebelum menggunakan bot ini mohon untuk patuhi peraturan yang telah kami buat,_
-*DENGAN TIDAK MELAKUKAN PANGGILAN TELFON/VC ATAU KAKAK AKAN DIBLOKIR, KARNA BOT SUDAH DIPROGRAM OTOMATIS MEMBLOKIR KONTAK PENELFON!!!.*
-_instagram.com/mmaul404_
+_Sebelum menggunakan bot ini mohon untuk patuhi peraturan yang telah kami buat._
+*PERATURAN BOT.
+DILARANG KERAS TELFON/VC ATAU KAKAK DIBLOKIR, KARNA BOT NYA UDAH DI PROGRAM OTOMATIS.*
+
 Berikut adalah beberapa fitur yang ada pada bot ini! 🤖
 
 Sticker Creator Services:
--❥ *${prefix}stikertoimg*
--❥ *${prefix}sticker*   
--❥ *${prefix}gif*       
--❥ *${prefix}giphy*     
--❥ *${prefix}quotemaker*  
--❥ *${prefix}nulis*     
+-❥ *${prefix}sttext*    ERROR
+-❥ *${prefix}sticker*   OK
+-❥ *${prefix}gif*       OK
+-❥ *${prefix}giphy*     OK
+-❥ *${prefix}meme*      OK
+-❥ *${prefix}quotemaker*    ERROR   
+-❥ *${prefix}nulis*     ERROR
 
 Islamic Services:
--❥ *${prefix}listsurah* 
--❥ *${prefix}infosurah* 
--❥ *${prefix}surah*     
--❥ *${prefix}tafsir*    
--❥ *${prefix}ALaudio*   
+-❥ *${prefix}listsurah* OK
+-❥ *${prefix}infosurah* OK
+-❥ *${prefix}surah*     OK
+-❥ *${prefix}tafsir*    OK
+-❥ *${prefix}ALaudio*   OK
+-❥ *${prefix}jsolat*    ERROR
 
 Fun Menu (In Group Only):
--❥ *${prefix}katakasar* 
+-❥ *${prefix}simisimi*  ERROR
+-❥ *${prefix}katakasar* OK
 	┷-❥ *${prefix}klasmen*
 
+Download Services:
+-❥ *${prefix}ytmp3* ERROR
+-❥ *${prefix}ytmp4* ERROR
+-❥ *${prefix}facebook*  ERROR
+
+Primbon:
+-❥ *${prefix}cekzodiak* OK
+-❥ *${prefix}artinama*  OK  
+-❥ *${prefix}cekjodoh*  OK
+
 Search Any:
--❥ *${prefix}images*    
--❥ *${prefix}sreddit*   
--❥ *${prefix}resep*     
--❥ *${prefix}cuaca*
+-❥ *${prefix}dewabatch* ERROR
+-❥ *${prefix}images*    OK
+-❥ *${prefix}sreddit*   OK
+-❥ *${prefix}resep*     OK
+-❥ *${prefix}stalkig*   ERROR
+-❥ *${prefix}wiki*      OK
+-❥ *${prefix}cuaca*     OK
+-❥ *${prefix}chord*     OK
+-❥ *${prefix}lirik*     OK
+-❥ *${prefix}play*      ERROR
+-❥ *${prefix}movie*     ERROR
 
 Random Teks:
--❥ *${prefix}fakta*     
--❥ *${prefix}pantun*    
--❥ *${prefix}katabijak* 
+-❥ *${prefix}motivasi*  ERROR
+-❥ *${prefix}howgay*    ERROR
+-❥ *${prefix}fakta*     OK
+-❥ *${prefix}pantun*    OK
+-❥ *${prefix}katabijak* OK
+-❥ *${prefix}quote*     OK  
+-❥ *${prefix}cerpen*    ERROR
+-❥ *${prefix}cerdew*    ERROR
+-❥ *${prefix}puisi*     ERROR
 
 Random Images:
--❥ *${prefix}memes*     
+-❥ *${prefix}anime*     DISABLED
+-❥ *${prefix}kpop*      DISABLED
+-❥ *${prefix}memes*     OK
 
 Lain-lain:
--❥ *${prefix}tts*       
--❥ *${prefix}grouplink* 
--❥ *${prefix}revoke*    
+-❥ *${prefix}tts*       OK
+-❥ *${prefix}translate* ERROR
+-❥ *${prefix}covidindo* OK
+-❥ *${prefix}ceklokasi* ERROR
+-❥ *${prefix}alayfont*  OK
+-❥ *${prefix}grouplink* OK
+-❥ *${prefix}revoke*    OK
 
 Tentang Bot:
--❥ *${prefix}tnc*       
--❥ *${prefix}donasi*    
--❥ *${prefix}botstat*   
--❥ *${prefix}ping*      
+-❥ *${prefix}tnc*       OK
+-❥ *${prefix}donasi*    OK
+-❥ *${prefix}botstat*   OK
+-❥ *${prefix}join*      ERROR
+-❥ *${prefix}ping*      OK
 
 _-_-_-_-_-_-_-_-_-_-_-_-_-_
 
@@ -133,7 +167,7 @@ Dimohon untuk tidak menghapus link github saya, butuh support dari kalian! makas
 
 */
 
-exports.textDonasi = (pushname) => {
+exports.textDonasi = () => {
     return `
 Hallo ${pushname}! terimakasih telah menggunakan bot ini, untuk mendukung bot ini kamu dapat membantu dengan berdonasi dengan cara:
 
