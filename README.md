@@ -1,33 +1,26 @@
 <p align="center">
-<img src="https://avatars2.githubusercontent.com/u/53950128?s=460&u=09f530e3326f710c4e0f9106f094eeea5429f86d&v=4" width="128" height="128"/>
+<img src="https://avatars.githubusercontent.com/u/25873486?s=460&u=1502f7e7638d008f16c8dde8e9f3da108e1293b9&v=4" width="128" height="128"/>
 </p>
 <p align="center">
 <a href="#"><img title="Whatsapp-Bot" src="https://img.shields.io/badge/Whatsapp Bot-green?colorA=%23ff0000&colorB=%23017e40&style=for-the-badge"></a>
 </p>
 <p align="center">
-<a href="https://github.com/ArugaZ"><img title="Author" src="https://img.shields.io/badge/AUTHOR-ARUGAZ-orange.svg?style=for-the-badge&logo=github"></a>
+<a href="https://github.com/VanmoelJr"><img title="Author" src="https://img.shields.io/badge/AUTHOR-M2-orange.svg?style=for-the-badge&logo=github"></a>
 </p>
 <p align="center">
-<a href="https://www.codefactor.io/repository/github/arugaz/whatsapp-bot/overview/master"><img title="Rating" src="https://www.codefactor.io/repository/github/arugaz/whatsapp-bot/badge/master"></a>
+<a href="https://www.codefactor.io/repository/github/VanmoelJr/wa-v2/overview/master"><img title="Rating" src="https://www.codefactor.io/repository/github/VanmoelJr/wa-v2/badge/master"></a>
 </p>
 <p align="center">
-<a href="https://github.com/arugaz/followers"><img title="Followers" src="https://img.shields.io/github/followers/arugaz?color=blue&style=flat-square"></a>
-<a href="https://github.com/arugaz/whatsapp-bot/stargazers/"><img title="Stars" src="https://img.shields.io/github/stars/arugaz/whatsapp-bot?color=red&style=flat-square"></a>
-<a href="https://github.com/arugaz/whatsapp-bot/network/members"><img title="Forks" src="https://img.shields.io/github/forks/arugaz/whatsapp-bot?color=red&style=flat-square"></a>
-<a href="https://github.com/arugaz/whatsapp-bot/watchers"><img title="Watching" src="https://img.shields.io/github/watchers/arugaz/whatsapp-bot?label=Watchers&color=blue&style=flat-square"></a>
-<a href="https://hits.seeyoufarm.com"><img src="https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fgithub.com%2FArugaZ%2Fwhatsapp-bot&count_bg=%2379C83D&title_bg=%23555555&icon=probot.svg&icon_color=%2300FF6D&title=hits&edge_flat=false"/></a>
+<a href="https://github.com/VanmoelJr/followers"><img title="Followers" src="https://img.shields.io/github/followers/VanmoelJr?color=blue&style=flat-square"></a>
+<a href="https://github.com/VanmoelJr/wa-v2/stargazers/"><img title="Stars" src="https://img.shields.io/github/stars/VanmoelJr/wa-v2?color=red&style=flat-square"></a>
+<a href="https://github.com/VanmoelJr/wa-v2/network/members"><img title="Forks" src="https://img.shields.io/github/forks/VanmoelJr/wa-v2?color=red&style=flat-square"></a>
+<a href="https://github.com/VanmoelJr/wa-v2/watchers"><img title="Watching" src="https://img.shields.io/github/watchers/VanmoelJr/wa-v2?label=Watchers&color=blue&style=flat-square"></a>
+<a href="https://hits.seeyoufarm.com"><img src="https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fgithub.com%2FVanmoelJr%2Fwa-v2&count_bg=%2379C83D&title_bg=%23555555&icon=probot.svg&icon_color=%2300FF6D&title=hits&edge_flat=false"/></a>
 </p>
 <div align="center">
-<details>
- <summary>🥟 Help me!</summary>
- 
- [Trakteer](https://trakteer.id/arugabot)
- 
-</details>
 
 ini semua gratis, jangan pelit ⭐️ ya :D
-<p align="center"><a href="https://arugaz.herokuapp.com/" target="_blank">My Rest APIs</a>.</p>
-<p align="center"><a href="https://wa.me/447520622174?text=%23menu" target="_blank">My Whatsapp BOT</a>.</p>
+<p align="center"><a href="https://arugaz.herokuapp.com/" target="_blank">Arugaz Rest APIs</a>.</p>
 </div>
 
 ## Getting Started
@@ -38,7 +31,7 @@ This project require NodeJS v12.
 Clone this project
 
 ```bash
-> git clone https://github.com/ArugaZ/whatsapp-bot.git
+> git clone https://github.com/VanmoelJr/wa-v2.git
 > cd whatsapp-bot
 ```
 
@@ -59,16 +52,16 @@ Run the Whatsapp bot
 after running it you need to scan the qr
 
 ### Information
-- Change ownerNumber on [this section](https://github.com/ArugaZ/whatsapp-bot/blob/master/settings/setting.json#L2)
-- Change groupLimit on [this section](https://github.com/ArugaZ/whatsapp-bot/blob/master/settings/setting.json#L3)
-- Change memberLimit on [this section](https://github.com/ArugaZ/whatsapp-bot/blob/master/settings/setting.json#L4)
-- Change prefix on [this section](https://github.com/ArugaZ/whatsapp-bot/blob/master/settings/setting.json#L5)
-- Change menu on [this section](https://github.com/ArugaZ/whatsapp-bot/blob/master/lib/menu.js#L32)
-- Add kata kasar on [this section](https://github.com/ArugaZ/whatsapp-bot/blob/master/lib/kataKotor.js#L8)
-- Change all apiKey on [this section](https://github.com/ArugaZ/whatsapp-bot/blob/master/settings/api.json)
+- Change ownerNumber on [this section](https://github.com/VanmoelJr/wa-v2/blob/master/settings/setting.json#L2)
+- Change groupLimit on [this section](https://github.com/VanmoelJr/wa-v2/blob/master/settings/setting.json#L3)
+- Change memberLimit on [this section](https://github.com/VanmoelJr/wa-v2/blob/master/settings/setting.json#L4)
+- Change prefix on [this section](https://github.com/VanmoelJr/wa-v2/blob/master/settings/setting.json#L5)
+- Change menu on [this section](https://github.com/VanmoelJr/wa-v2/blob/master/lib/menu.js#L32)
+- Add kata kasar on [this section](https://github.com/VanmoelJr/wa-v2/blob/master/lib/kataKotor.js#L8)
+- Change all apiKey on [this section](https://github.com/VanmoelJr/wa-v2/blob/master/settings/api.json)
 - Get Api NoBackground on [this website](https://www.remove.bg/)
 - Get Api ScreenShot on [this website](https://apiflash.com/)
-- Get Api Simi-simi on [this website](https://workshop.simsimi.com/en/), masih limit api simi-siminya? [cek ini](https://github.com/ArugaZ/whatsapp-bot/issues/38#issuecomment-726981060)
+- Get Api Simi-simi on [this website](https://workshop.simsimi.com/en/), masih limit api simi-siminya? [cek ini](https://github.com/VanmoelJr/wa-v2/issues/38#issuecomment-726981060)
 
 ---
 
