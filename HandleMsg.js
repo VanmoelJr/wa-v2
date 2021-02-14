@@ -141,9 +141,6 @@ module.exports = HandleMsg = async (m2, message) => {
         case 'tnc':
             await m2.sendText(from, menuId.textTnC())
             break
-        case 'beta':
-            await m2.sendText(from, 'Maaf untuk sementara layanan ini tidak tersedia')
-            break
         case 'menu':
         case 'help':
             await m2.sendText(from, menuId.textMenu(pushname))
@@ -156,10 +153,10 @@ module.exports = HandleMsg = async (m2, message) => {
             break
         case 'donate':
         case 'donasi':
-            await m2.sendText(from, menuId.textDonasi(pushname))
+            // await m2.sendText(from, menuId.textDonasi())
+            await m2.sendFileFromUrl(from, `${don}`, '', menuId.textDonasi())
             break
-        /* Menampilkan Info Owner Bot
-        case 'ownerbot':
+        /* case 'ownerbot':
             await m2.sendContact(from, ownerNumber)
             .then(() => m2.sendText(from, 'Jika kalian ingin request fitur silahkan chat nomor owner!'))
             break */
@@ -196,34 +193,32 @@ module.exports = HandleMsg = async (m2, message) => {
             break
         }
 
-        // Sticker Menu
-        // Mengubah Sticker to Image
+        //Sticker Converter
         case 'stikertoimg':
         case 'stickertoimg':
         case 'stimg':
-            if (quotedMsg && quotedMsg.type == 'sticker') {
-                const mediaData = await decryptMedia(quotedMsg)
-                m2.reply(from, `Sedang di proses! Silahkan tunggu sebentar...`, id)
-                const imageBase64 = `data:${quotedMsg.mimetype};base64,${mediaData.toString('base64')}`
-                await m2.sendFile(from, imageBase64, 'imgsticker.jpg', 'Berhasil convert Sticker to Image!', id)
-                .then(() => {
-                    console.log(`Sticker to Image Processed for ${processTime(t, moment())} Seconds`)
-                })
-        } else if (!quotedMsg) return m2.reply(from, `Format salah, silahkan tag atau reply sticker yang ingin dijadikan gambar!`, id)
-        break
-
-        // Mengubah Text Menjadi Sticker
-        /* Error
+                if (quotedMsg && quotedMsg.type == 'sticker') {
+                    const mediaData = await decryptMedia(quotedMsg)
+                    m2.reply(from, `Sedang di proses! Silahkan tunggu sebentar...`, id)
+                    const imageBase64 = `data:${quotedMsg.mimetype};base64,${mediaData.toString('base64')}`
+                    await m2.sendFile(from, imageBase64, 'imgsticker.jpg', 'Berhasil convert Sticker to Image!', id)
+                    .then(() => {
+                        console.log(`Sticker to Image Processed for ${processTime(t, moment())} Seconds`)
+                    })
+            } else if (!quotedMsg) return m2.reply(from, `Format salah, silahkan tag sticker yang ingin dijadikan gambar!`, id)
+            break
+    		
+			
+        // Sticker Creator
         case 'sttext':
-        case 'coolteks':
-        case 'cooltext':
-            if (args.length == 0) return m2.reply(from, `Untuk membuat teks keren CoolText pada gambar, gunakan ${prefix}cooltext teks atau ${prefix}sttext\n\nContoh: ${prefix}cooltext M2 Bot`, id)
-                rugaapi.cooltext(args[0]).then(async(res) => {
-                    await m2.sendFileFromUrl(from, `${res.link}`, '', `${res.text}`, id)
-                })
-		break */
-        
-        // Mengubah Gambar Menjadi Sticker
+    	case 'coolteks':
+    	case 'cooltext':
+                if (args.length == 0) return m2.reply(from, `Untuk membuat teks keren CoolText pada gambar, gunakan ${prefix}cooltext teks\n\nContoh: ${prefix}cooltext m2bot`, id)
+    		rugaapi.cooltext(args[0])
+    		.then(async(res) => {
+    		await m2.sendFileFromUrl(from, `${res.link}`, '', `${res.text}`, id)
+    		})
+    		break
         case 'sticker':
         case 'stiker':
             if ((isMedia || isQuotedImage) && args.length === 0) {
@@ -233,7 +228,7 @@ module.exports = HandleMsg = async (m2, message) => {
                 const imageBase64 = `data:${_mimetype};base64,${mediaData.toString('base64')}`
                 m2.sendImageAsSticker(from, imageBase64)
                 .then(() => {
-                    m2.reply(from, 'Mantap!\nIni dia stickernya kak! 😄', id)
+                    m2.reply(from, 'Here\'s your sticker')
                     console.log(`Sticker Processed for ${processTime(t, moment())} Second`)
                 })
             } else if (args[0] === 'nobg') {
@@ -247,9 +242,6 @@ module.exports = HandleMsg = async (m2, message) => {
                     var result = await removeBackgroundFromImageBase64({ base64img, apiKey: apiNoBg, size: 'auto', type: 'auto', outFile })
                     await fs.writeFile(outFile, result.base64img)
                     await m2.sendImageAsSticker(from, `data:${mimetype};base64,${result.base64img}`)
-                    .then(() =>{
-                        m2.reply(from, 'Berhasil membuat sticker tanpa background!', id)
-                    })
                     } catch(err) {
                     console.log(err)
 	   	            await m2.reply(from, 'Maaf batas penggunaan hari ini sudah mencapai maksimal', id)
@@ -258,46 +250,67 @@ module.exports = HandleMsg = async (m2, message) => {
             } else if (args.length === 1) {
                 if (!isUrl(url)) { await m2.reply(from, 'Maaf, link yang kamu kirim tidak valid.', id) }
                 m2.sendStickerfromUrl(from, url).then((r) => (!r && r !== undefined)
-                    ? m2.sendText(from, 'Maaf, link yang kamu kirim tidak memuat gambar!', id)
-                    : m2.reply(from, 'Here\'s your sticker 😄', id)).then(() => console.log(`Sticker Processed for ${processTime(t, moment())} Second`))
+                    ? m2.sendText(from, 'Maaf, link yang kamu kirim tidak memuat gambar.')
+                    : m2.reply(from, 'Here\'s your sticker')).then(() => console.log(`Sticker Processed for ${processTime(t, moment())} Second`))
             } else {
                 await m2.reply(from, `Tidak ada gambar! Untuk menggunakan ${prefix}sticker\n\n\nKirim gambar dengan caption\n${prefix}sticker <biasa>\n${prefix}sticker nobg <tanpa background>\n\natau Kirim pesan dengan\n${prefix}sticker <link_gambar>`, id)
             }
             break
-	
-        // Menmbuat Sticker Bergerak
+    	case 'brainly':
+                if (!isGroupMsg) return m2.reply(from, 'Perintah ini hanya bisa di gunakan dalam group!', id)
+                
+                
+                
+                if (args.length >= 2){
+                    const BrainlySearch = require('./lib/brainly')
+                    let tanya = body.slice(9)
+                    let jum = Number(tanya.split('.')[1]) || 2
+                    if (jum > 10) return m2.reply(from, 'Max 10!', id)
+                    if (Number(tanya[tanya.length-1])){
+                        tanya
+                    }
+                    m2.reply(from, `➸ *Pertanyaan* : ${tanya.split('.')[0]}\n\n➸ *Jumlah jawaban* : ${Number(jum)}`, id)
+                    await BrainlySearch(tanya.split('.')[0],Number(jum), function(res){
+                        res.forEach(x=>{
+                            if (x.jawaban.fotoJawaban.length == 0) {
+                                m2.reply(from, `➸ *Pertanyaan* : ${x.pertanyaan}\n\n➸ *Jawaban* : ${x.jawaban.judulJawaban}\n`, id)
+    			    m2.sendText(from, 'Selesai ✅, donasi kesini ya paypal.me/TheSploit | Pulsa : 085754337101')
+                            } else {
+                                m2.reply(from, `➸ *Pertanyaan* : ${x.pertanyaan}\n\n➸ *Jawaban* 〙: ${x.jawaban.judulJawaban}\n\n➸ *Link foto jawaban* : ${x.jawaban.fotoJawaban.join('\n')}`, id)
+                            }
+                        })
+                    })
+                } else {
+                    m2.reply(from, 'Usage :\n!brainly [pertanyaan] [.jumlah]\n\nEx : \n!brainly NKRI .2', id)
+                }
+                break
         case 'stickergif':
         case 'stikergif':
         case 'gif':
             if (isMedia || isQuotedVideo) {
                 if (mimetype === 'video/mp4' && message.duration < 10 || mimetype === 'image/gif' && message.duration < 10) {
                     var mediaData = await decryptMedia(message, uaOverride)
-                    m2.reply(from, '[WAIT] Sedang di proses ⏳ silahkan tunggu ± 1 min!', id)
+                    m2.reply(from, '[WAIT] Sedang di proses⏳ silahkan tunggu ± 1 min!', id)
                     var filename = `./media/stickergif.${mimetype.split('/')[1]}`
                     await fs.writeFileSync(filename, mediaData)
                     await exec(`gify ${filename} ./media/stickergf.gif --fps=30 --scale=240:240`, async function (error, stdout, stderr) {
                         var gif = await fs.readFileSync('./media/stickergf.gif', { encoding: "base64" })
                         await m2.sendImageAsSticker(from, `data:image/gif;base64,${gif.toString('base64')}`)
-                        .then(() =>{
-                        m2.reply(from, 'Berhasil membuat sticker tanpa background!', id)
-                        })
                         .catch(() => {
                             m2.reply(from, 'Maaf filenya terlalu besar!', id)
                         })
                     })
                   } else {
-                    m2.reply(from, `[❗] Error tidak dapat memproses file pastikan format penulisan benar dan durasi max 10 sec!`, id)
+                    m2.reply(from, `[❗] Kirim gif dengan caption *${prefix}stickergif* max 10 sec!`, id)
                    }
                 } else {
-		    m2.reply(from, `[❗] Kirim gif dengan caption *${prefix}stickergif* atau *${prefix}gif*`, id)
+		    m2.reply(from, `[❗] Kirim gif dengan caption *${prefix}stickergif*`, id)
 	        }
             break
-
-        // Mengubah File dari Giphy to Gif Sticker
         case 'giphy':
         case 'stikergiphy':
         case 'stickergiphy':
-            if (args.length !== 1) return m2.reply(from, `Maaf, format pesan salah.\nKetik pesan dengan ${prefix}stickergiphy <link_giphy> atau *${prefix}giphy* <link_giphy> tanpa menggunakan tanda kurung`, id)
+            if (args.length !== 1) return m2.reply(from, `Maaf, format pesan salah.\nKetik pesan dengan ${prefix}stickergiphy <link_giphy>`, id)
             const isGiphy = url.match(new RegExp(/https?:\/\/(www\.)?giphy.com/, 'gi'))
             const isMediaGiphy = url.match(new RegExp(/https?:\/\/media.giphy.com\/media/, 'gi'))
             if (isGiphy) {
@@ -315,18 +328,16 @@ module.exports = HandleMsg = async (m2, message) => {
                 const smallGifUrl = url.replace(gifUrl[0], 'giphy-downsized.gif')
                 m2.sendGiphyAsSticker(from, smallGifUrl)
                 .then(() => {
-                    m2.reply(from, 'Here\'s your sticker 😄')
+                    m2.reply(from, 'Here\'s your sticker')
                     console.log(`Sticker Processed for ${processTime(t, moment())} Second`)
                 })
                 .catch(() => {
                     m2.reply(from, `Ada yang error!`, id)
                 })
             } else {
-                await m2.reply(from, 'Maaf, command sticker giphy hanya bisa menggunakan link dari website giphy.  [Giphy Only]', id)
+                await m2.reply(from, 'Maaf, command sticker giphy hanya bisa menggunakan link dari giphy.  [Giphy Only]', id)
             }
             break
-
-        // Membuat Meme dari Gambar
         case 'meme':
             if ((isMedia || isQuotedImage) && args.length >= 2) {
                 const top = arg.split('|')[0]
@@ -337,7 +348,7 @@ module.exports = HandleMsg = async (m2, message) => {
                 const ImageBase64 = await meme.custom(getUrl, top, bottom)
                 m2.sendFile(from, ImageBase64, 'image.png', '', null, true)
                     .then(() => {
-                        m2.reply(from, 'Ini memenya hyung!',id)
+                        m2.reply(from, 'Ini makasih!',id)
                     })
                     .catch(() => {
                         m2.reply(from, 'Ada yang error!')
@@ -346,30 +357,25 @@ module.exports = HandleMsg = async (m2, message) => {
                 await m2.reply(from, `Tidak ada gambar! Silahkan kirim gambar dengan caption ${prefix}meme <teks_atas> | <teks_bawah>\ncontoh: ${prefix}meme teks atas | teks bawah`, id)
             }
             break
-
-        // Membuat Quote
         case 'quotemaker':
-        case 'makequote':
             const qmaker = body.trim().split('|')
             if (qmaker.length >= 3) {
                 const quotes = qmaker[1]
                 const author = qmaker[2]
                 const theme = qmaker[3]
-                m2.reply(from, 'Proses kak...', id)
+                m2.reply(from, 'Proses kak..', id)
                 try {
                     const hasilqmaker = await images.quote(quotes, author, theme)
-                    m2.sendFileFromUrl(from, `${hasilqmaker}`, '', 'Ini kak... 😀', id)
+                    m2.sendFileFromUrl(from, `${hasilqmaker}`, '', 'Ini kak..', id)
                 } catch {
-                    m2.reply('Yahh proses gagal 😟, mohon periksa kembali quotesnya yaa?..', id)
+                    m2.reply('Yahh proses gagal, kakak isinya sudah benar belum?..', id)
                 }
             } else {
-                m2.reply(from, `Pemakaian ${prefix}quotemaker |isi quote|author|theme\n\nContoh: ${prefix}quotemaker |Alonely is Fine|~M2|random\n\nuntuk theme nya pakai random ya kak..`, id)
+                m2.reply(from, `Pemakaian ${prefix}quotemaker |isi quote|author|theme\n\ncontoh: ${prefix}quotemaker |aku sayang kamu|-m2|random\n\nuntuk theme nya pakai random ya kak..`)
             }
             break
-
-        // Membuat Fake Nulis
         case 'nulis':
-            if (args.length == 0) return m2.reply(from, `Membuat bot menulis teks yang dikirim menjadi gambar\nPemakaian: ${prefix}nulis [teks]\n\nContoh: ${prefix}nulis i love you 3000, tapi boong`, id)
+            if (args.length == 0) return m2.reply(from, `Membuat bot menulis teks yang dikirim menjadi gambar\nPemakaian: ${prefix}nulis [teks]\n\ncontoh: ${prefix}nulis i love you 3000`, id)
             const nulisq = body.slice(7)
             const nulisp = await rugaapi.tulis(nulisq)
             await m2.sendImage(from, `${nulisp}`, '', 'Nih...', id)
@@ -378,34 +384,7 @@ module.exports = HandleMsg = async (m2, message) => {
             })
             break
 
-        // Brainly.com
-        case 'brainly':
-            if (!isGroupMsg) return m2.reply(from, 'Perintah ini hanya bisa di gunakan dalam group!', id)            
-            if (args.length >= 2){
-                const BrainlySearch = require('./lib/brainly')
-                let tanya = body.slice(9)
-                let jum = Number(tanya.split('.')[1]) || 2
-                if (jum > 10) return m2.reply(from, 'Max 10!', id)
-                if (Number(tanya[tanya.length-1])){
-                    tanya
-                }
-                m2.reply(from, `➸ *Pertanyaan* : ${tanya.split('.')[0]}\n\n➸ *Jumlah jawaban* : ${Number(jum)}`, id)
-                await BrainlySearch(tanya.split('.')[0],Number(jum), function(res){
-                    res.forEach(x=>{
-                        if (x.jawaban.fotoJawaban.length == 0) {
-                            m2.reply(from, `➸ *Pertanyaan* : ${x.pertanyaan}\n\n➸ *Jawaban* : ${x.jawaban.judulJawaban}\n`, id)
-                m2.sendText(from, 'Selesai ✅')
-                        } else {
-                            m2.reply(from, `➸ *Pertanyaan* : ${x.pertanyaan}\n\n➸ *Jawaban* 〙: ${x.jawaban.judulJawaban}\n\n➸ *Link foto jawaban* : ${x.jawaban.fotoJawaban.join('\n')}`, id)
-                        }
-                    })
-                })
-            } else {
-                m2.reply(from, 'Usage :\n!brainly [pertanyaan] [.jumlah]\n\nEx : \n!brainly NKRI .2', id)
-            }
-            break
-
-        // Islamic Menu
+        //Islam Command
         case 'listsurah':
             try {
                 axios.get('https://raw.githubusercontent.com/ArugaZ/grabbed-results/main/islam/surah.json')
@@ -552,10 +531,8 @@ module.exports = HandleMsg = async (m2, message) => {
                 m2.reply(from, 'Ada yang Error!', id)
             })
             break
-
 	//Group All User
 	case 'grouplink':
-	case 'gruplink':
             if (!isBotGroupAdmins) return m2.reply(from, 'Perintah ini hanya bisa di gunakan ketika bot menjadi admin', id)
             if (isGroupMsg) {
                 const inviteLink = await m2.getGroupInviteLink(groupId);
@@ -577,8 +554,7 @@ module.exports = HandleMsg = async (m2, message) => {
                             });
                     }
                     break;
-
-        // Social Media Menu
+        //Media
         case 'ytmp3':
             if (args.length == 0) return m2.reply(from, `Untuk mendownload lagu dari youtube\nketik: ${prefix}ytmp3 [link_yt]`, id)
             const linkmp3 = args[0].replace('https://youtu.be/','').replace('https://www.youtube.com/watch?v=','')
@@ -592,7 +568,6 @@ module.exports = HandleMsg = async (m2, message) => {
 				})
 			})
             break
-
         case 'ytmp4':
             if (args.length == 0) return m2.reply(from, `Untuk mendownload lagu dari youtube\nketik: ${prefix}ytmp3 [link_yt]`, id)
             const linkmp4 = args[0].replace('https://youtu.be/','').replace('https://www.youtube.com/watch?v=','')
@@ -622,71 +597,33 @@ module.exports = HandleMsg = async (m2, message) => {
 				})
 			})
 			break
-        case 'stalkig':
-            if (args.length == 0) return m2.reply(from, `Untuk men-stalk akun instagram seseorang\nketik ${prefix}stalkig [username]\ncontoh: ${prefix}stalkig ini.arga`, id)
-            const igstalk = await rugaapi.stalkig(args[0])
-            const igstalkpict = await rugaapi.stalkigpict(args[0])
-            await m2.sendFileFromUrl(from, igstalkpict, '', igstalk, id)
-            .catch(() => {
-                m2.reply(from, 'Ada yang Error!', id)
-            })
-            break
-        case 'play'://silahkan kalian custom sendiri jika ada yang ingin diubah
-            if (args.length == 0) return m2.reply(from, `Untuk mencari lagu dari youtube\n\nPenggunaan: ${prefix}play judul lagu`, id)
-            axios.get(`https://arugaytdl.herokuapp.com/search?q=${body.slice(6)}`)
-            .then(async (res) => {
-                await m2.sendFileFromUrl(from, `${res.data[0].thumbnail}`, ``, `Lagu ditemukan\n\nJudul: ${res.data[0].title}\nDurasi: ${res.data[0].duration}detik\nUploaded: ${res.data[0].uploadDate}\nView: ${res.data[0].viewCount}\n\nsedang dikirim`, id)
-                rugaapi.ytmp3(`https://youtu.be/${res.data[0].id}`)
-                .then(async(res) => {
-                    if (res.status == 'error') return m2.sendFileFromUrl(from, `${res.link}`, '', `${res.error}`)
-                    await m2.sendFileFromUrl(from, `${res.thumb}`, '', `Lagu ditemukan\n\nJudul ${res.title}\n\nSabar lagi dikirim`, id)
-                    await m2.sendFileFromUrl(from, `${res.link}`, '', '', id)
-                    .catch(() => {
-                        m2.reply(from, `URL Ini ${args[0]} Sudah pernah di Download sebelumnya. URL akan di Reset setelah 1 Jam/60 Menit`, id)
-                    })
-                })
-            })
-            .catch(() => {
-                m2.reply(from, 'Ada yang Error!', id)
-            })
-            break
 			
-        // Fitur Lainnya Start
-		// Primbon Menu
-		/* API PRIMBON ERROR
-		case 'zodiak':
+		//Primbon Menu
 		case 'cekzodiak':
             if (args.length !== 4) return m2.reply(from, `Untuk mengecek zodiak, gunakan ${prefix}cekzodiak nama tanggallahir bulanlahir tahunlahir\nContoh: ${prefix}cekzodiak fikri 13 06 2004`, id)
             const cekzodiak = await rugaapi.cekzodiak(args[0],args[1],args[2])
             await m2.reply(from, cekzodiak, id)
             .catch(() => {
-                m2.reply(from, 'Mohon ikuti seperti petunjuk!', id)
+                m2.reply(from, 'Ada yang Error!', id)
             })
             break
-        case 'jodoh':
-            if (args.length !== 2) return m2.reply(from, `Untuk mengecek zodiak, gunakan ${prefix}cekzodiak nama tanggallahir bulanlahir tahunlahir\nContoh: ${prefix}cekzodiak fikri 13 06 2004`, id)
-            rugaapi.cekzodiak(args[0],args[1])
-            .then(async(res) => {
-				await m2.sendFileFromUrl(from, `${res.link}`, '', `${res.text}`, id)
-			})
-			break
-        case 'cekjodoh':
-			if (args.length !== 2) return m2.reply(from, `Untuk mengecek jodoh melalui nama\nketik: ${prefix}cekjodoh nama-kamu nama-pasangan\n\ncontoh: ${prefix}cekjodoh bagas siti\n\nhanya bisa pakai nama panggilan (satu kata)`, id)
-			rugaapi.cekjodoh(args[0],args[1])
-			.then(async(res) => {
-				await m2.sendFileFromUrl(from, `${res.link}`, '', `${res.text}`, id)
-			})
-			break
 		case 'artinama':
 			if (args.length == 0) return m2.reply(from, `Untuk mengetahui arti nama seseorang\nketik ${prefix}artinama namakamu`, id)
             rugaapi.artinama(body.slice(10))
 			.then(async(res) => {
 				await m2.reply(from, `Arti : ${res}`, id)
 			})
-			break */
-
+			break
+		case 'cekjodoh':
+			if (args.length !== 2) return m2.reply(from, `Untuk mengecek jodoh melalui nama\nketik: ${prefix}cekjodoh nama-kamu nama-pasangan\n\ncontoh: ${prefix}cekjodoh bagas siti\n\nhanya bisa pakai nama panggilan (satu kata)`)
+			rugaapi.cekjodoh(args[0],args[1])
+			.then(async(res) => {
+				await m2.sendFileFromUrl(from, `${res.link}`, '', `${res.text}`, id)
+			})
+			break
+			
         // Random Kata
-      	/*case 'motivasi':
+      	case 'motivasi':
             fetch('https://raw.githubusercontent.com/selyxn/motivasi/main/motivasi.txt')
             .then(res => res.text())
             .then(body => {
@@ -697,8 +634,8 @@ module.exports = HandleMsg = async (m2, message) => {
             .catch(() => {
                 m2.reply(from, 'Ada yang Error!', id)
             })
-            break*/
-	      /*case 'howgay':
+            break
+	      case 'howgay':
         		if (args.length == 0) return m2.reply(from, `Untuk mengetahui seberapa gay seseorang gunakan ${prefix}howgay namanya\n\nContoh: ${prefix}howgay burhan`, id)
             fetch('https://raw.githubusercontent.com/MrPawNO/howgay/main/howgay.txt')
             .then(res => res.text())
@@ -710,7 +647,7 @@ module.exports = HandleMsg = async (m2, message) => {
             .catch(() => {
                 m2.reply(from, 'Ada yang Error!', id)
             })
-            break */
+            break
         case 'fakta':
             fetch('https://raw.githubusercontent.com/ArugaZ/grabbed-results/main/random/faktaunix.txt')
             .then(res => res.text())
@@ -747,7 +684,7 @@ module.exports = HandleMsg = async (m2, message) => {
                 m2.reply(from, 'Ada yang Error!', id)
             })
             break
-        /*case 'quote':
+        case 'quote':
             const quotex = await rugaapi.quote()
             await m2.reply(from, quotex, id)
             .catch(() => {
@@ -760,7 +697,7 @@ module.exports = HandleMsg = async (m2, message) => {
 		    		await m2.reply(from, res.result, id)
       			})
 		      	break
-	     	case 'cerdew':
+	     	case 'cersex':
 			      rugaapi.cersex()
 			      .then(async (res) => {
 			    	await m2.reply(from, res.result, id)
@@ -771,11 +708,10 @@ module.exports = HandleMsg = async (m2, message) => {
 		      	.then(async (res) => {
 			    	await m2.reply(from, res.result, id)
 		      	})
-		      	break*/
-        // Fitur Lainnya End
+		      	break
 
-        // Random Images
-        /* case 'anime':
+        //Random Images
+        case 'anime':
             if (args.length == 0) return m2.reply(from, `Untuk menggunakan ${prefix}anime\nSilahkan ketik: ${prefix}anime [query]\nContoh: ${prefix}anime random\n\nquery yang tersedia:\nrandom, waifu, husbu, neko`, id)
             if (args[0] == 'random' || args[0] == 'waifu' || args[0] == 'husbu' || args[0] == 'neko') {
                 fetch('https://raw.githubusercontent.com/ArugaZ/grabbed-results/main/random/anime/' + args[0] + '.txt')
@@ -808,7 +744,7 @@ module.exports = HandleMsg = async (m2, message) => {
             } else {
                 m2.reply(from, `Maaf query tidak tersedia. Silahkan ketik ${prefix}kpop untuk melihat list query`)
             }
-            break */
+            break
         case 'memes':
             const randmeme = await meme.random()
             m2.sendFileFromUrl(from, randmeme, '', '', id)
@@ -817,15 +753,14 @@ module.exports = HandleMsg = async (m2, message) => {
             })
             break
         
-        // Fitur Pencarian Start
-    	case 'dewabatch':
-    		if (args.length == 0) return m2.reply(from, `Untuk mencari anime batch dari Dewa Batch, ketik ${prefix}dewabatch judul\n\nContoh: ${prefix}dewabatch naruto`, id)
-    		rugaapi.dewabatch(args[0])
-    		.then(async(res) => {
-    		await m2.sendFileFromUrl(from, `${res.link}`, '', `${res.text}`, id)
-    		})
-    		break
-        case 'img':
+        // Search Any
+	case 'dewabatch':
+		if (args.length == 0) return m2.reply(from, `Untuk mencari anime batch dari Dewa Batch, ketik ${prefix}dewabatch judul\n\nContoh: ${prefix}dewabatch naruto`, id)
+		rugaapi.dewabatch(args[0])
+		.then(async(res) => {
+		await m2.sendFileFromUrl(from, `${res.link}`, '', `${res.text}`, id)
+		})
+		break
         case 'images':
             if (args.length == 0) return m2.reply(from, `Untuk mencari gambar dari pinterest\nketik: ${prefix}images [search]\ncontoh: ${prefix}images naruto`, id)
             const cariwall = body.slice(8)
@@ -835,7 +770,6 @@ module.exports = HandleMsg = async (m2, message) => {
                 m2.reply(from, 'Ada yang Error!', id)
             })
             break
-        case 'reddit':
         case 'sreddit':
             if (args.length == 0) return m2.reply(from, `Untuk mencari gambar dari sub reddit\nketik: ${prefix}sreddit [search]\ncontoh: ${prefix}sreddit naruto`, id)
             const carireddit = body.slice(9)
@@ -854,7 +788,7 @@ module.exports = HandleMsg = async (m2, message) => {
                 m2.reply(from, 'Ada yang Error!', id)
             })
             break
-        /*case 'nekopoi':
+        case 'nekopoi':
              rugapoi.getLatest()
             .then((result) => {
                 rugapoi.getVideo(result.link)
@@ -869,8 +803,16 @@ module.exports = HandleMsg = async (m2, message) => {
             .catch(() => {
                 m2.reply(from, 'Ada yang Error!', id)
             })
-            break */
-        /* API ERROR
+            break
+        case 'stalkig':
+            if (args.length == 0) return m2.reply(from, `Untuk men-stalk akun instagram seseorang\nketik ${prefix}stalkig [username]\ncontoh: ${prefix}stalkig ini.arga`, id)
+            const igstalk = await rugaapi.stalkig(args[0])
+            const igstalkpict = await rugaapi.stalkigpict(args[0])
+            await m2.sendFileFromUrl(from, igstalkpict, '', igstalk, id)
+            .catch(() => {
+                m2.reply(from, 'Ada yang Error!', id)
+            })
+            break
         case 'wiki':
             if (args.length == 0) return m2.reply(from, `Untuk mencari suatu kata dari wikipedia\nketik: ${prefix}wiki [kata]`, id)
             const wikip = body.slice(6)
@@ -879,7 +821,7 @@ module.exports = HandleMsg = async (m2, message) => {
             .catch(() => {
                 m2.reply(from, 'Ada yang Error!', id)
             })
-            break */
+            break
         case 'cuaca':
             if (args.length == 0) return m2.reply(from, `Untuk melihat cuaca pada suatu daerah\nketik: ${prefix}cuaca [daerah]`, id)
             const cuacaq = body.slice(7)
@@ -889,7 +831,7 @@ module.exports = HandleMsg = async (m2, message) => {
                 m2.reply(from, 'Ada yang Error!', id)
             })
             break
-        /*case 'lyrics':
+        case 'lyrics':
         case 'lirik':
             if (args.length == 0) return m2.reply(from, `Untuk mencari lirik dari sebuah lagu\bketik: ${prefix}lirik [judul_lagu]`, id)
             rugaapi.lirik(body.slice(7))
@@ -905,25 +847,43 @@ module.exports = HandleMsg = async (m2, message) => {
             .catch(() => {
                 m2.reply(from, 'Ada yang Error!', id)
             })
-            break*/
-        /*case 'ss': //jika error silahkan buka file di folder settings/api.json dan ubah apiSS 'API-KEY' yang kalian dapat dari website https://apiflash.com/
+            break
+        case 'ss': //jika error silahkan buka file di folder settings/api.json dan ubah apiSS 'API-KEY' yang kalian dapat dari website https://apiflash.com/
             if (args.length == 0) return m2.reply(from, `Membuat bot men-screenshot sebuah web\n\nPemakaian: ${prefix}ss [url]\n\ncontoh: ${prefix}ss http://google.com`, id)
             const scrinshit = await meme.ss(args[0])
             await m2.sendFile(from, scrinshit, 'ss.jpg', 'cekrek', id)
             .catch(() => {
                 m2.reply(from, 'Ada yang Error!', id)
             })
-            break */
-        
-		/*case 'movie':
+            break
+        case 'play'://silahkan kalian custom sendiri jika ada yang ingin diubah
+            if (args.length == 0) return m2.reply(from, `Untuk mencari lagu dari youtube\n\nPenggunaan: ${prefix}play judul lagu`, id)
+            axios.get(`https://arugaytdl.herokuapp.com/search?q=${body.slice(6)}`)
+            .then(async (res) => {
+                await m2.sendFileFromUrl(from, `${res.data[0].thumbnail}`, ``, `Lagu ditemukan\n\nJudul: ${res.data[0].title}\nDurasi: ${res.data[0].duration}detik\nUploaded: ${res.data[0].uploadDate}\nView: ${res.data[0].viewCount}\n\nsedang dikirim`, id)
+				rugaapi.ytmp3(`https://youtu.be/${res.data[0].id}`)
+				.then(async(res) => {
+					if (res.status == 'error') return m2.sendFileFromUrl(from, `${res.link}`, '', `${res.error}`)
+					await m2.sendFileFromUrl(from, `${res.thumb}`, '', `Lagu ditemukan\n\nJudul ${res.title}\n\nSabar lagi dikirim`, id)
+					await m2.sendFileFromUrl(from, `${res.link}`, '', '', id)
+					.catch(() => {
+						m2.reply(from, `URL Ini ${args[0]} Sudah pernah di Download sebelumnya. URL akan di Reset setelah 1 Jam/60 Menit`, id)
+					})
+				})
+            })
+            .catch(() => {
+                m2.reply(from, 'Ada yang Error!', id)
+            })
+            break
+		case 'movie':
 			if (args.length == 0) return m2.reply(from, `Untuk mencari suatu movie dari website sdmovie.fun\nketik: ${prefix}movie judulnya`, id)
 			rugaapi.movie((body.slice(7)))
 			.then(async (res) => {
 				if (res.status == 'error') return m2.reply(from, res.hasil, id)
 				await m2.sendFileFromUrl(from, res.link, 'movie.jpg', res.hasil, id)
 			})
-			break */
-        /* case 'whatanime':
+			break
+        case 'whatanime':
             if (isMedia && type === 'image' || quotedMsg && quotedMsg.type === 'image') {
                 if (isMedia) {
                     var mediaData = await decryptMedia(message, uaOverride)
@@ -963,22 +923,18 @@ module.exports = HandleMsg = async (m2, message) => {
             } else {
 				m2.reply(from, `Maaf format salah\n\nSilahkan kirim foto dengan caption ${prefix}whatanime\n\nAtau reply foto dengan caption ${prefix}whatanime`, id)
 			}
-            break 
-            */
+            break
             
-        // Fitur Pencarian End
-
         // Other Command
-        /* case 'resi':
+        case 'resi':
             if (args.length !== 2) return m2.reply(from, `Maaf, format pesan salah.\nSilahkan ketik pesan dengan ${prefix}resi <kurir> <no_resi>\n\nKurir yang tersedia:\njne, pos, tiki, wahana, jnt, rpx, sap, sicepat, pcp, jet, dse, first, ninja, lion, idl, rex`, id)
             const kurirs = ['jne', 'pos', 'tiki', 'wahana', 'jnt', 'rpx', 'sap', 'sicepat', 'pcp', 'jet', 'dse', 'first', 'ninja', 'lion', 'idl', 'rex']
             if (!kurirs.includes(args[0])) return m2.sendText(from, `Maaf, jenis ekspedisi pengiriman tidak didukung layanan ini hanya mendukung ekspedisi pengiriman ${kurirs.join(', ')} Tolong periksa kembali.`)
             console.log('Memeriksa No Resi', args[1], 'dengan ekspedisi', args[0])
             cekResi(args[0], args[1]).then((result) => m2.sendText(from, result))
-            break */
-
+            break
         case 'tts':
-            if (args.length == 0) return m2.reply(from, `Mengubah teks menjadi sound (google voice)\nketik: ${prefix}tts <kode_bahasa> <teks>\ncontoh : ${prefix}tts id halo\nuntuk kode bahasa cek disini : https://anotepad.com/note/read/5xqahdy8`, id)
+            if (args.length == 0) return m2.reply(from, `Mengubah teks menjadi sound (google voice)\nketik: ${prefix}tts <kode_bahasa> <teks>\ncontoh : ${prefix}tts id halo\nuntuk kode bahasa cek disini : https://anotepad.com/note/read/5xqahdy8`)
             const ttsGB = require('node-gtts')(args[0])
             const dataText = body.slice(8)
                 if (dataText === '') return m2.reply(from, 'apa teksnya syg..', id)
@@ -990,7 +946,7 @@ module.exports = HandleMsg = async (m2, message) => {
                     m2.reply(from, err, id)
                 }
             break
-        /*case 'translate':
+        case 'translate':
             if (args.length != 1) return m2.reply(from, `Maaf, format pesan salah.\nSilahkan reply sebuah pesan dengan caption ${prefix}translate <kode_bahasa>\ncontoh ${prefix}translate id`, id)
             if (!quotedMsg) return m2.reply(from, `Maaf, format pesan salah.\nSilahkan reply sebuah pesan dengan caption ${prefix}translate <kode_bahasa>\ncontoh ${prefix}translate id`, id)
             const quoteText = quotedMsg.type == 'chat' ? quotedMsg.body : quotedMsg.type == 'image' ? quotedMsg.caption : ''
@@ -1017,8 +973,8 @@ module.exports = HandleMsg = async (m2, message) => {
             }
             const text = `*CEK LOKASI PENYEBARAN COVID-19*\nHasil pemeriksaan dari lokasi yang anda kirim adalah *${zoneStatus.status}* ${zoneStatus.optional}\n\nInformasi lokasi terdampak disekitar anda:\n${datax}`
             m2.sendText(from, text)
-            break */
-        /* case 'shortlink':
+            break
+        case 'shortlink':
             if (args.length == 0) return m2.reply(from, `ketik ${prefix}shortlink <url>`, id)
             if (!isUrl(args[0])) return m2.reply(from, 'Maaf, url yang kamu kirim tidak valid.', id)
             const shortlink = await urlShortener(args[0])
@@ -1026,14 +982,14 @@ module.exports = HandleMsg = async (m2, message) => {
             .catch(() => {
                 m2.reply(from, 'Ada yang Error!', id)
             })
-            break 
-		case 'alayfont':
-			if (args.length == 0) return m2.reply(from, `Mengubah kalimat menjadi alayyyyy\n\nketik ${prefix}alayfont kalimat`, id)
+            break
+		case 'bapakfont':
+			if (args.length == 0) return m2.reply(from, `Mengubah kalimat menjadi alayyyyy\n\nketik ${prefix}bapakfont kalimat`, id)
 			rugaapi.bapakfont(body.slice(11))
 			.then(async(res) => {
 				await m2.reply(from, `${res}`, id)
 			})
-			break */
+			break
 		
 		//Fun Menu
         case 'klasemen':
@@ -1058,7 +1014,6 @@ module.exports = HandleMsg = async (m2, message) => {
 	        if (args.length !== 1) return m2.reply(from, `Untuk menggunakan ${prefix}add\nPenggunaan: ${prefix}add <nomor>\ncontoh: ${prefix}add 628xxx`, id)
                 try {
                     await m2.addParticipant(from,`${args[0]}@c.us`)
-                    m2.sendTextWithMentions(from, `Hello, Welcome to the group  ${mentionedJidList.map(x => `@${x.replace('@c.us', '')}`).join('\n')}, Have fun with us! ✨`)
                 } catch {
                     m2.reply(from, 'Tidak dapat menambahkan target', id)
                 }
@@ -1069,7 +1024,7 @@ module.exports = HandleMsg = async (m2, message) => {
             if (!isBotGroupAdmins) return m2.reply(from, 'Gagal, silahkan tambahkan bot sebagai admin grup!', id)
             if (mentionedJidList.length === 0) return m2.reply(from, 'Maaf, format pesan salah.\nSilahkan tag satu atau lebih orang yang akan dikeluarkan', id)
             if (mentionedJidList[0] === botNumber) return await m2.reply(from, 'Maaf, format pesan salah.\nTidak dapat mengeluarkan akun bot sendiri', id)
-            await m2.sendTextWithMentions(from, `See you next time ${mentionedJidList.map(x => `@${x.replace('@c.us', '')}`).join('\n')}, We'll miss you 😭`)
+            await m2.sendTextWithMentions(from, `Request diterima, mengeluarkan:\n${mentionedJidList.map(x => `@${x.replace('@c.us', '')}`).join('\n')}`)
             for (let i = 0; i < mentionedJidList.length; i++) {
                 if (groupAdmins.includes(mentionedJidList[i])) return await m2.sendText(from, 'Gagal, kamu tidak bisa mengeluarkan admin grup.')
                 await m2.removeParticipant(groupId, mentionedJidList[i])
@@ -1161,14 +1116,14 @@ module.exports = HandleMsg = async (m2, message) => {
 				m2.reply(from, `Untuk mengaktifkan Fitur Kata Kasar pada Group Chat\n\nApasih kegunaan Fitur Ini? Apabila seseorang mengucapkan kata kasar akan mendapatkan denda\n\nPenggunaan\n${prefix}kasar on --mengaktifkan\n${prefix}kasar off --nonaktifkan\n\n${prefix}reset --reset jumlah denda`, id)
 			}
 			break
-		/* case 'reset':
+		case 'reset':
 			if (!isGroupMsg) return m2.reply(from, 'Maaf, perintah ini hanya dapat dipakai didalam grup!', id)
             if (!isGroupAdmins) return m2.reply(from, 'Gagal, perintah ini hanya dapat digunakan oleh admin grup!', id)
 			const reset = db.get('group').find({ id: groupId }).assign({ members: []}).write()
             if(reset){
 				await m2.sendText(from, "Klasemen telah direset.")
             }
-			break */
+			break
 		case 'mutegrup':
 			if (!isGroupMsg) return m2.reply(from, 'Maaf, perintah ini hanya dapat dipakai didalam grup!', id)
             if (!isGroupAdmins) return m2.reply(from, 'Gagal, perintah ini hanya dapat digunakan oleh admin grup!', id)
@@ -1198,7 +1153,7 @@ module.exports = HandleMsg = async (m2, message) => {
 				? m2.reply(from, 'Maaf, link yang kamu kirim tidak memuat gambar.', id)
 				: m2.reply(from, 'Berhasil mengubah profile group', id))
 			} else {
-				m2.reply(from, `Commands ini digunakan untuk mengganti icon/profile group chat\n\n\nPenggunaan:\n1. Silahkan kirim/reply sebuah gambar dengan caption ${prefix}setprofile\n\n2. Silahkan ketik ${prefix}setprofile linkImage`, id)
+				m2.reply(from, `Commands ini digunakan untuk mengganti icon/profile group chat\n\n\nPenggunaan:\n1. Silahkan kirim/reply sebuah gambar dengan caption ${prefix}setprofile\n\n2. Silahkan ketik ${prefix}setprofile linkImage`)
 			}
 			break
 		case 'welcome':
@@ -1261,12 +1216,12 @@ module.exports = HandleMsg = async (m2, message) => {
             break
         case 'bc': //untuk broadcast atau promosi
             if (!isOwnerBot) return m2.reply(from, 'Perintah ini hanya untuk Owner bot!', id)
-            if (args.length == 0) return m2.reply(from, `Untuk broadcast ke semua chat ketik:\n${prefix}bc [isi chat]`, id)
+            if (args.length == 0) return m2.reply(from, `Untuk broadcast ke semua chat ketik:\n${prefix}bc [isi chat]`)
             let msg = body.slice(4)
             const chatz = await m2.getAllChatIds()
             for (let idk of chatz) {
                 var cvk = await m2.getChatById(idk)
-                if (!cvk.isReadOnly) m2.sendText(idk, `〘 *M 2 - B C* 〙\n\n${msg}`)
+                if (!cvk.isReadOnly) m2.sendText(idk, `〘 *M 2  B C* 〙\n\n${msg}`)
                 if (cvk.isReadOnly) m2.sendText(idk, `〘 *M 2  B C* 〙\n\n${msg}`)
             }
             m2.reply(from, 'Broadcast Success!', id)
@@ -1295,7 +1250,6 @@ module.exports = HandleMsg = async (m2, message) => {
         }
 		
 		// Simi-simi function
-		/*
 		if ((!isCmd && isGroupMsg && isSimi) && message.type === 'chat') {
 			axios.get(`https://arugaz.herokuapp.com/api/simisimi?kata=${encodeURIComponent(message.body)}&apikey=${apiSimi}`)
 			.then((res) => {
@@ -1305,7 +1259,7 @@ module.exports = HandleMsg = async (m2, message) => {
 			.catch((err) => {
 				m2.reply(from, `${err}`, id)
 			})
-		} */
+		}
 		
 		// Kata kasar function
 		if(!isCmd && isGroupMsg && isNgegas) {
